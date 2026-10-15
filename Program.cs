@@ -16,6 +16,22 @@ public class ChargingStation
         Id = id;
         MaxKw = maxKw;
     }
+
+    // NY KOD FÖR STEG 3:
+    public void StartCharging()
+    {
+        if (!IsAvailable)
+        {
+            throw new InvalidOperationException("Kan inte starta laddning: Stationen är redan upptagen!");
+        }
+
+        IsAvailable = false;
+    }
+
+    public void StopCharging()
+    {
+        IsAvailable = true;
+    }
 }
 
 class Program
