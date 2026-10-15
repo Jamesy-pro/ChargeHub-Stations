@@ -17,7 +17,6 @@ public class ChargingStation
         MaxKw = maxKw;
     }
 
-    // NY KOD FÖR STEG 3:
     public void StartCharging()
     {
         if (!IsAvailable)
@@ -38,6 +37,21 @@ class Program
 {
     static void Main(string[] args)
     {
-        // Vi fyller i testkoden här i Steg 4
+        // Skapa station AC-01 med 11 kW
+        var station = new ChargingStation("AC-01", 11);
+
+        try
+        {
+            Console.WriteLine($"Startar första laddningen på {station.Id} ({station.MaxKw} kW)...");
+            station.StartCharging();
+            Console.WriteLine($"Laddning igång! Är stationen ledig? {station.IsAvailable}");
+
+            Console.WriteLine("Försöker starta en andra laddning samtidigt...");
+            station.StartCharging(); // Här kommer det smälla!
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Fel fångat: {ex.Message}");
+        }
     }
 }
