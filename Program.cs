@@ -1,6 +1,6 @@
 ﻿using System;
 
-public class ChargingStation
+public class ChargingStation : IReportable
 {
     public string Id { get; }
     public double MaxKw { get; }
@@ -15,6 +15,11 @@ public class ChargingStation
 
         Id = id;
         MaxKw = maxKw;
+
+        public string GetReport()
+{
+    return $"Station {Id}: {MaxKw} kW";
+}
     }
 
     public void StartCharging()
