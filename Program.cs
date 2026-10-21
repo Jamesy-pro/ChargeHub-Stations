@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic; // Behövs för att kunna använda List<>
 
 public class ChargingStation : IReportable
 {
@@ -15,11 +16,12 @@ public class ChargingStation : IReportable
 
         Id = id;
         MaxKw = maxKw;
+    } // <-- Här slutar konstruktorn!
 
-        public string GetReport()
-{
-    return $"Station {Id}: {MaxKw} kW";
-}
+    // GetReport() ligger nu utanför konstruktorn, direkt i klassen:
+    public string GetReport()
+    {
+        return $"Station {Id}: {MaxKw} kW";
     }
 
     public void StartCharging()
@@ -42,21 +44,18 @@ class Program
 {
     static void Main(string[] args)
     {
-        // Skapa station AC-01 med 11 kW
-        var station = new ChargingStation("AC-01", 11);
-
-        try
+        // Här i Main skapar vi listan med både bil och laddstationer
+        List<IReportable> reportables = new List<IReportable>
         {
-            Console.WriteLine($"Startar första laddningen på {station.Id} ({station.MaxKw} kW)...");
-            station.StartCharging();
-            Console.WriteLine($"Laddning igång! Är stationen ledig? {station.IsAvailable}");
+            new Vehicle { Id = 1, BatteryKwh = 75 },
+            new ChargingStation("AC-01", 11),
+            new ChargingStation("DC-01", 150)
+        };
 
-            Console.WriteLine("Försöker starta en andra laddning samtidigt...");
-            station.StartCharging(); // Här kommer det smälla!
-        }
-        catch (InvalidOperationException ex)
+        // Och här loopar vi igenom listan och skriver ut varje rapport
+        foreach (IReportable item in reportables)
         {
-            Console.WriteLine($"Fel fångat: {ex.Message}");
+            Console.WriteLine(item.GetReport());
         }
     }
 }
